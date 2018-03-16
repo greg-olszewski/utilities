@@ -91,7 +91,7 @@ ULDDU=/usr/local/vesta/data/users
 
 for i in `ls $ULDDU`; do
 {
-		#replace also config in /home/user/conf/web directory
+        #replace also config in /home/user/conf/web directory
         find /home/$ULDDU/conf/web -type f | xargs sed -i  "s/${OLD_IP}/${NEW_IP}/g"
 
         if [ ! -d $ULDDU/$i ]; then
