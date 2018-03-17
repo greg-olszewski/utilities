@@ -1,12 +1,14 @@
 #!/bin/sh
 
-#script to change ips on a VestaCP server.
-#usage:
+# Script to change ips on a VestaCP server.
+# Usage:
 # $0 <oldip> <newip>
 #
 # Based on crypto's script - https://forum.vestacp.com/viewtopic.php?t=5975
 # Modified to suit recent VestaCP versions and Debian/Ubuntu installations
 # Tested with vesta 0.9.8 on CentOS 7 and Debian 8
+#
+# Author Grzegorz C. Olszewski <grzegorz@olszewski.in>
 
 LOG=/var/log/vesta/system.log
 
