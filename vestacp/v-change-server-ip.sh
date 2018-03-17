@@ -5,7 +5,7 @@
 # $0 <oldip> <newip>
 #
 # Based on crypto's script - https://forum.vestacp.com/viewtopic.php?t=5975
-# modified to suit recent VestaCP versions
+# Modified to suit recent VestaCP versions and Debian/Ubuntu installations
 # Tested with vesta 0.9.8 on CentOs 7
 
 LOG=/var/log/vesta/system.log
@@ -35,6 +35,12 @@ BIN=`echo $0 | awk -F/ '{print $NF}'`
 export DISTRO="Centos"
 if [ -f /etc/lsb-release -o -d /etc/lsb-release.d ]; then
         export DISTRO=$(lsb_release -i | cut -d: -f2 | sed s/'^\t'//)
+fi
+
+if [ $DISTRO = *"Debian"* ] || [ $DISTRO = *"Ubuntu"* ]; then
+        export DEBIANBASED = 1
+else
+        export DEBIANBASED = 0
 fi
 
 log()
@@ -75,12 +81,17 @@ else
         log "$DATE $0 $IPFILE_OLD\t: $OLD_IP -> $NEW_IP";
 fi
 
-if [ "${HAVE_HTTPD}" -eq 1 ]; then
+if [ "${HAVE_HTTPD}" -eq 1 ] && [ "${DEBIANBASED}" -eq 0 ]; then
         if [ -e /etc/httpd/conf.d/${OLD_IP}.conf ]; then
                 swapfile /etc/httpd/conf.d/${OLD_IP}.conf
                 mv -f /etc/httpd/conf.d/$OLD_IP.conf /etc/httpd/conf.d/${NEW_IP}.conf
         fi
         swapfile /etc/httpd/conf.d/mod_extract_forwarded.conf
+else
+        if [ -e /etc/apache2/conf.d/${OLD_IP}.conf ]; then
+                swapfile /etc/apache2/conf.d/${OLD_IP}.conf
+                mv -f /etc/apache2/conf.d/$OLD_IP.conf /etc/apache2/conf.d/${NEW_IP}.conf
+        fi
 fi
 
 if [ "${HAVE_NGINX}" -eq 1 ]; then
