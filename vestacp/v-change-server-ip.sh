@@ -6,7 +6,7 @@
 #
 # Based on crypto's script - https://forum.vestacp.com/viewtopic.php?t=5975
 # Modified to suit recent VestaCP versions and Debian/Ubuntu installations
-# Tested with vesta 0.9.8 on CentOs 7
+# Tested with vesta 0.9.8 on CentOS 7 and Debian 8
 
 LOG=/var/log/vesta/system.log
 
