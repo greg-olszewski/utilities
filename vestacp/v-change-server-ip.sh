@@ -32,6 +32,11 @@ HAVE_NGINX=1
 DATE=`date '+%F %X'`
 BIN=`echo $0 | awk -F/ '{print $NF}'`
 
+export DISTRO="Centos"
+if [ -f /etc/lsb-release -o -d /etc/lsb-release.d ]; then
+        export DISTRO=$(lsb_release -i | cut -d: -f2 | sed s/'^\t'//)
+fi
+
 log()
 {
         echo -e "$1";
@@ -124,7 +129,11 @@ done;
 
 #this is needed to update the serial in the db files.
 if [ "${HAVE_HTTPD}" -eq 1 ]; then
-   service httpd restart
+    if [ $DISTRO = *"Debian"* ] || [ $DISTRO = *"Ubuntu"* ]; then
+        service apache2 restart
+    else
+        service httpd restart
+    fi
 fi
 if [ "${HAVE_NGINX}" -eq 1 ]; then
    service nginx restart
