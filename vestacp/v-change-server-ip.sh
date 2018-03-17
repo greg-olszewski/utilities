@@ -144,6 +144,7 @@ done;
 
 #this is needed to update the serial in the db files.
 if [ "${HAVE_HTTPD}" -eq 1 ]; then
+    echo "Restarting Apache"
     if [ "${DEBIANBASED}" -eq 1 ]; then
         service apache2 restart
     else
@@ -151,7 +152,8 @@ if [ "${HAVE_HTTPD}" -eq 1 ]; then
     fi
 fi
 if [ "${HAVE_NGINX}" -eq 1 ]; then
-   service nginx restart
+    echo "Restarting nginx"
+    service nginx restart
 fi
 
 echo "*** Done swapping $OLD_IP to $NEW_IP ***";
