@@ -32,15 +32,17 @@ HAVE_NGINX=1
 DATE=`date '+%F %X'`
 BIN=`echo $0 | awk -F/ '{print $NF}'`
 
-export DISTRO="Centos"
-if [ -f /etc/lsb-release -o -d /etc/lsb-release.d ]; then
-        export DISTRO=$(lsb_release -i | cut -d: -f2 | sed s/'^\t'//)
+DISTRO="Centos"
+if hash lsb_release 2>/dev/null; then
+        DISTRO=$(lsb_release -i | cut -d: -f2 | sed s/'^\t'//)
 fi
 
-if [ $DISTRO = *"Debian"* ] || [ $DISTRO = *"Ubuntu"* ]; then
-        export DEBIANBASED = 1
+if [ $DISTRO = "Debian" ] || [ $DISTRO = "Ubuntu" ]; then
+        DEBIANBASED=1
+        echo "Running in Debian/Ubuntu mode"
 else
-        export DEBIANBASED = 0
+        DEBIANBASED=0
+        echo "Running in RHEL/CentOS mode"
 fi
 
 log()
@@ -140,7 +142,7 @@ done;
 
 #this is needed to update the serial in the db files.
 if [ "${HAVE_HTTPD}" -eq 1 ]; then
-    if [ $DISTRO = *"Debian"* ] || [ $DISTRO = *"Ubuntu"* ]; then
+    if [ "${DEBIANBASED}" -eq 1 ]; then
         service apache2 restart
     else
         service httpd restart
